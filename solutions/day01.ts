@@ -41,6 +41,16 @@ export function solve_part2(left_list: number[], right_list: number[]): number {
   return similarity_score;
 }
 
+if (import.meta.main) {
+  const input_string = Deno.readTextFileSync("./input/day01.txt");
+  const [left_list, right_list] = parse_input(input_string);
+  console.log("Day 1 Part 1:");
+  console.log(solve_part1(left_list, right_list));
+
+  console.log("Day 1 Part 2:");
+  console.log(solve_part2(left_list, right_list));
+}
+
 const test_input_string = `3   4
 4   3
 2   5
