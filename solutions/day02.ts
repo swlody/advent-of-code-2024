@@ -5,16 +5,32 @@ type Report = Level[];
 
 function is_report_safe(report: Report): boolean {
   const increasing = report[0] < report[1];
+  const min_diff = increasing ? 1 : -3;
+  const max_diff = increasing ? 3 : -1;
 
   for (let i = 0; i < report.length - 1; i++) {
     const difference = report[i + 1] - report[i];
-    if ((increasing && difference < 0) || (!increasing && difference > 0)) {
+    if (difference < min_diff || difference > max_diff) {
       return false;
-    } else {
-      const abs_difference = Math.abs(difference);
-      if (abs_difference < 1 || abs_difference > 3) {
-        return false;
-      }
+    }
+  }
+
+  return true;
+}
+
+function remove_bad_level(report: Report, index_to_remove: number): Report {
+  return [
+    ...report.slice(0, index_to_remove),
+    ...report.slice(index_to_remove + 1),
+  ];
+}
+
+function is_report_safe_tolerant(report: Report): boolean {
+  for (let i = 0; i < report.length - 1; i++) {
+    const difference = report[i + 1] - report[i];
+    if (difference < 1 || difference > 3) {
+      return is_report_safe(remove_bad_level(report, i)) ||
+        is_report_safe(remove_bad_level(report, i + 1));
     }
   }
 
@@ -31,23 +47,17 @@ export function solve_part1(reports: Report[]): number {
   return reports.filter(is_report_safe).length;
 }
 
-// AHHH so dumb
-function is_any_report_safe(report: Report): boolean {
-  if (is_report_safe(report)) {
-    return true;
-  } else {
-    for (let i = 0; i < report.length; i++) {
-      const new_report = [...report.slice(0, i), ...report.slice(i + 1)];
-      if (is_report_safe(new_report)) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
 export function solve_part2(reports: Report[]): number {
-  return reports.filter(is_any_report_safe).length;
+  let count = 0;
+  for (const report of reports) {
+    if (
+      is_report_safe_tolerant(report) ||
+      is_report_safe_tolerant(report.toReversed())
+    ) {
+      count++;
+    }
+  }
+  return count;
 }
 
 if (import.meta.main) {
