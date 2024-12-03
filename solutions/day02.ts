@@ -37,17 +37,17 @@ function is_report_safe_tolerant(report: Report): boolean {
   return true;
 }
 
-export function parse_input(input_string: string): Report[] {
-  return input_string.split("\n").map((line) =>
+function parse_input(input: string): Report[] {
+  return input.split("\n").map((line) =>
     line.split(" ").map((x) => parseInt(x))
   );
 }
 
-export function solve_part1(reports: Report[]): number {
+function solve_part1(reports: Report[]): number {
   return reports.filter(is_report_safe).length;
 }
 
-export function solve_part2(reports: Report[]): number {
+function solve_part2(reports: Report[]): number {
   let count = 0;
   for (const report of reports) {
     if (
@@ -61,8 +61,8 @@ export function solve_part2(reports: Report[]): number {
 }
 
 if (import.meta.main) {
-  const input_string = Deno.readTextFileSync("./input/day02.txt");
-  const reports = parse_input(input_string);
+  const input = Deno.readTextFileSync("./input/day02.txt");
+  const reports = parse_input(input);
   console.log("Day 2 Part 1:");
   console.log(solve_part1(reports));
 
@@ -70,7 +70,11 @@ if (import.meta.main) {
   console.log(solve_part2(reports));
 }
 
-const test_input_string = `7 6 4 2 1
+//
+// Tests
+//
+
+const test_input = `7 6 4 2 1
 1 2 7 8 9
 9 7 6 2 1
 1 3 2 4 5
@@ -78,13 +82,13 @@ const test_input_string = `7 6 4 2 1
 1 3 6 7 9`;
 
 Deno.test(function test_part1() {
-  const reports = parse_input(test_input_string);
+  const reports = parse_input(test_input);
   const solution = solve_part1(reports);
   assertEquals(2, solution);
 });
 
 Deno.test(function test_part2() {
-  const reports = parse_input(test_input_string);
+  const reports = parse_input(test_input);
   const solution = solve_part2(reports);
   assertEquals(4, solution);
 });
