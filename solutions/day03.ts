@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
 
-export function solve_part1(memory: string): number {
+function solve_part1(memory: string): number {
   const pattern = /mul\((\d+?),(\d+?)\)/g;
   let sum = 0;
   let result;
@@ -10,7 +10,7 @@ export function solve_part1(memory: string): number {
   return sum;
 }
 
-export function solve_part2(memory: string): number {
+function solve_part2(memory: string): number {
   const pattern = /mul\((\d+?),(\d+?)\)|(?:don't\(\))|(?:do\(\))/g;
   let sum = 0;
   let result;
